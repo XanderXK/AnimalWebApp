@@ -12,26 +12,20 @@ public class DataContext
         _configuration = configuration;
     }
 
-    private SqlConnection GetDbConnection<T>()
+    private SqlConnection GetDbConnection()
     {
         return new SqlConnection(_configuration.GetConnectionString("Default"));
     }
 
     public IEnumerable<T> LoadData<T>(string sql)
     {
-        var dbConnection = GetDbConnection<T>();
-        return dbConnection.Query<T>("sql");
+        var dbConnection = GetDbConnection();
+        return dbConnection.Query<T>(sql);
     }
     
-    public T LoadDataSingle<T>(string sql)
+    public bool Execute(string sql)
     {
-        var dbConnection = GetDbConnection<T>();
-        return dbConnection.QuerySingle<T>("sql");
-    }
-
-    public bool Execute<T>(string sql)
-    {
-        var dbConnection = GetDbConnection<T>();
-        return dbConnection.Execute("sql") > 0;
+        var dbConnection = GetDbConnection();
+        return dbConnection.Execute(sql) > 0;
     }
 }

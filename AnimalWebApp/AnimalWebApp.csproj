@@ -11,12 +11,10 @@
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
 
 
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Animal\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Club\Index.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\" />
     </ItemGroup>
 
 
