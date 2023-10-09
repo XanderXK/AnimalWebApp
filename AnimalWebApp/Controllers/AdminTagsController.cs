@@ -65,4 +65,17 @@ public class AdminTagsController : Controller
 
         return RedirectToAction(nameof(TagList));
     }
+
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        var sql = $"DELETE FROM Tags WHERE Id={id}";
+        var result = _dataContext.Execute(sql);
+        if (!result)
+        {
+            return RedirectToAction(nameof(Edit), new { id = id });
+        }
+
+        return RedirectToAction(nameof(TagList));
+    }
 }
