@@ -1,17 +1,20 @@
 using AnimalWebApp.Data;
 using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnimalWebApp.Controllers;
 
 public class AdminTagsController : Controller
 {
-    private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
+    private readonly DataContext _dataContext;
 
-    public AdminTagsController(IConfiguration configuration)
+    public AdminTagsController(IConfiguration configuration, IMapper mapper)
     {
-        _configuration = configuration;
+        _mapper = mapper;
+        _dataContext = new DataContext(configuration);
     }
 
     [HttpGet]
@@ -23,9 +26,8 @@ public class AdminTagsController : Controller
     [HttpPost]
     public IActionResult Add(AddTagRequest addTagRequest)
     {
-        var dataContext = new DataContext(_configuration);
         var sql = $"INSERT INTO Tags (Name, DisplayName) VALUES ('{addTagRequest.Name}', '{addTagRequest.DisplayName}')";
-        var result = dataContext.Execute(sql);
+        var result = _dataContext.Execute(sql);
         if (!result)
         {
             return BadRequest(ModelState);
@@ -37,9 +39,30 @@ public class AdminTagsController : Controller
     [HttpGet]
     public IActionResult TagList()
     {
-        var dataContext = new DataContext(_configuration);
         var sql = $"SELECT * FROM Tags";
-        var tags = dataContext.LoadData<Tag>(sql).ToList();
+        var tags = _dataContext.LoadData<Tag>(sql);
         return View(tags);
+    }
+
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        var sql = $"SELECT * FROM TAGS WHERE Id={id}";
+        var tag = _dataContext.LoadSingleData<Tag>(sql);
+        var editTag = _mapper.Map<EditTagRequest>(tag);
+        return View(editTag);
+    }
+
+    [HttpPost]
+    public IActionResult Edit(EditTagRequest editTagRequest)
+    {
+        var sql = $"UPDATE Tags Set Name='{editTagRequest.Name}', DisplayName= '{editTagRequest.DisplayName}' WHERE Id={editTagRequest.Id}";
+        var result = _dataContext.Execute(sql);
+        if (!result)
+        {
+            return RedirectToAction(nameof(Edit), new { id = editTagRequest.Id });
+        }
+
+        return RedirectToAction(nameof(TagList));
     }
 }

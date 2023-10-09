@@ -17,10 +17,16 @@ public class DataContext
         return new SqlConnection(_configuration.GetConnectionString("Default"));
     }
 
-    public IEnumerable<T> LoadData<T>(string sql)
+    public List<T> LoadData<T>(string sql)
     {
         var dbConnection = GetDbConnection();
-        return dbConnection.Query<T>(sql);
+        return dbConnection.Query<T>(sql).ToList();
+    }
+    
+    public T LoadSingleData<T>(string sql)
+    {
+        var dbConnection = GetDbConnection();
+        return dbConnection.QuerySingle<T>(sql);
     }
     
     public bool Execute(string sql)
