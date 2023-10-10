@@ -4,10 +4,11 @@ using AutoMapper;
 
 namespace AnimalWebApp.Helpers;
 
-public class MappingProfiles: Profile
+public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<Tag, EditTagRequest>();
+        CreateMap<Tag, EditTagRequest>().ReverseMap();
+        CreateMap<Tag, AddTagRequest>().ReverseMap();
     }
 }

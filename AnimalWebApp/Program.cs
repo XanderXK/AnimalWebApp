@@ -1,7 +1,10 @@
+using AnimalWebApp.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 var app = builder.Build();
 

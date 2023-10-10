@@ -1,6 +1,7 @@
 using AnimalWebApp.Data;
 using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
+using AnimalWebApp.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +9,14 @@ namespace AnimalWebApp.Controllers;
 
 public class AdminTagsController : Controller
 {
+    private readonly ITagRepository _tagRepository;
     private readonly IMapper _mapper;
-    private readonly DataContext _dataContext;
 
-    public AdminTagsController(IConfiguration configuration, IMapper mapper)
+
+    public AdminTagsController(ITagRepository tagRepository, IMapper mapper)
     {
+        _tagRepository = tagRepository;
         _mapper = mapper;
-        _dataContext = new DataContext(configuration);
     }
 
     [HttpGet]
@@ -26,8 +28,8 @@ public class AdminTagsController : Controller
     [HttpPost]
     public IActionResult Add(AddTagRequest addTagRequest)
     {
-        var sql = $"INSERT INTO Tags (Name, DisplayName) VALUES ('{addTagRequest.Name}', '{addTagRequest.DisplayName}')";
-        var result = _dataContext.Execute(sql);
+        var tag = _mapper.Map<Tag>(addTagRequest);
+        var result = _tagRepository.Add(tag);
         if (!result)
         {
             return BadRequest(ModelState);
@@ -39,16 +41,14 @@ public class AdminTagsController : Controller
     [HttpGet]
     public IActionResult TagList()
     {
-        var sql = $"SELECT * FROM Tags";
-        var tags = _dataContext.LoadData<Tag>(sql);
+        var tags = _tagRepository.GetAll();
         return View(tags);
     }
 
     [HttpGet]
     public IActionResult Edit(int id)
     {
-        var sql = $"SELECT * FROM TAGS WHERE Id={id}";
-        var tag = _dataContext.LoadSingleData<Tag>(sql);
+        var tag = _tagRepository.Get(id);
         var editTag = _mapper.Map<EditTagRequest>(tag);
         return View(editTag);
     }
@@ -56,8 +56,8 @@ public class AdminTagsController : Controller
     [HttpPost]
     public IActionResult Edit(EditTagRequest editTagRequest)
     {
-        var sql = $"UPDATE Tags Set Name='{editTagRequest.Name}', DisplayName= '{editTagRequest.DisplayName}' WHERE Id={editTagRequest.Id}";
-        var result = _dataContext.Execute(sql);
+        var tag = _mapper.Map<Tag>(editTagRequest);
+        var result = _tagRepository.Update(tag);
         if (!result)
         {
             return RedirectToAction(nameof(Edit), new { id = editTagRequest.Id });
@@ -69,8 +69,7 @@ public class AdminTagsController : Controller
     [HttpPost]
     public IActionResult Delete(int id)
     {
-        var sql = $"DELETE FROM Tags WHERE Id={id}";
-        var result = _dataContext.Execute(sql);
+        var result = _tagRepository.Delete(id);
         if (!result)
         {
             return RedirectToAction(nameof(Edit), new { id = id });
