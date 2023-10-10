@@ -5,33 +5,29 @@ namespace AnimalWebApp.Data;
 
 public class DataContext
 {
-    private readonly IConfiguration _configuration;
+    private readonly string _connectionString;
+    
 
     public DataContext(IConfiguration configuration)
     {
-        _configuration = configuration;
-    }
-
-    private SqlConnection GetDbConnection()
-    {
-        return new SqlConnection(_configuration.GetConnectionString("Default"));
+        _connectionString = configuration.GetConnectionString("Default")!;
     }
 
     public List<T> LoadData<T>(string sql)
     {
-        var dbConnection = GetDbConnection();
+        using var dbConnection = new SqlConnection(_connectionString);
         return dbConnection.Query<T>(sql).ToList();
     }
-    
+
     public T LoadSingleData<T>(string sql)
     {
-        var dbConnection = GetDbConnection();
+        using var dbConnection = new SqlConnection(_connectionString);
         return dbConnection.QuerySingle<T>(sql);
     }
-    
+
     public bool Execute(string sql)
     {
-        var dbConnection = GetDbConnection();
+        using var dbConnection = new SqlConnection(_connectionString);
         return dbConnection.Execute(sql) > 0;
     }
 }
