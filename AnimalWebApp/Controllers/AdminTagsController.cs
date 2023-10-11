@@ -1,4 +1,3 @@
-using AnimalWebApp.Data;
 using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
 using AnimalWebApp.Repositories;
@@ -72,7 +71,7 @@ public class AdminTagsController : Controller
         var result = _tagRepository.Delete(id);
         if (!result)
         {
-            return RedirectToAction(nameof(Edit), new { id = id });
+            return RedirectToAction(nameof(Edit), new { id });
         }
 
         return RedirectToAction(nameof(TagList));

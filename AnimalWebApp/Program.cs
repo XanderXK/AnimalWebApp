@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IAnimalPostRepository, AnimalPostRepository>();
 
 var app = builder.Build();
 

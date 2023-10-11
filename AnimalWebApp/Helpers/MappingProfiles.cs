@@ -10,5 +10,6 @@ public class MappingProfiles : Profile
     {
         CreateMap<Tag, EditTagRequest>().ReverseMap();
         CreateMap<Tag, AddTagRequest>().ReverseMap();
+        CreateMap<AnimalPost, AddAnimalPostRequest>().ReverseMap();
     }
 }
