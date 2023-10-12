@@ -27,9 +27,20 @@ public class AnimalPostRepository : IAnimalPostRepository
 
     public bool Add(AnimalPost animalPost)
     {
-        var sql = $"INSERT INTO AnimalPosts ([Heading], [Title], [Content], [Description], [ImageUrl], [HandleUrl], [PublishedDate] ,[Author] , [Visible]) VALUES ('{animalPost.Heading}', '{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.HandleUrl}', {animalPost.PublishedDate}, '{animalPost.Author}', '{animalPost.Visible}')";
-       
-        return _dataContext.Execute(sql);
+        var sql = $"INSERT INTO AnimalPosts ([Title], [Content], [Description], [ImageUrl], [HandleUrl], [PublishedDate] ,[Author] ,[Visible]) VALUES ('{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.HandleUrl}', '{animalPost.PublishedDate}', '{animalPost.Author}', '{animalPost.Visible}'); SELECT SCOPE_IDENTITY()";
+
+        var recentId = _dataContext.LoadSingleData<int>(sql);
+        foreach (var tag in animalPost.Tags)
+        {
+            var tagSql = $"INSERT INTO TagsAnimalPosts (TagId, AnimalPostId) VALUES ({tag.Id}, {recentId})";
+            var result = _dataContext.Execute(tagSql);
+            if (!result)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public bool Update(AnimalPost animalPost)

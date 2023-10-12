@@ -1,5 +1,7 @@
+using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
 using AnimalWebApp.Repositories;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,11 +11,13 @@ public class AnimalPostsController : Controller
 {
     private readonly ITagRepository _tagRepository;
     private readonly IAnimalPostRepository _animalPostRepository;
+    private readonly IMapper _mapper;
 
-    public AnimalPostsController(ITagRepository tagRepository, IAnimalPostRepository animalPostRepository)
+    public AnimalPostsController(ITagRepository tagRepository, IAnimalPostRepository animalPostRepository, IMapper mapper)
     {
         _tagRepository = tagRepository;
         _animalPostRepository = animalPostRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -35,7 +39,10 @@ public class AnimalPostsController : Controller
     [HttpPost]
     public IActionResult Add(AddAnimalPostRequest addAnimalPostRequest)
     {
-        Console.WriteLine(addAnimalPostRequest);
+        var animalPost = _mapper.Map<AnimalPost>(addAnimalPostRequest);
+        animalPost.Tags = _tagRepository.GetAll()
+            .Where(tag => addAnimalPostRequest.SelectedTags.Contains(tag.Id.ToString())).ToList();
+        _animalPostRepository.Add(animalPost);
         return View(addAnimalPostRequest);
     }
 }
