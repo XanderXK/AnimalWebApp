@@ -61,6 +61,19 @@ public class AnimalPostsController : Controller
     }
 
     [HttpPost]
+    public IActionResult Edit(EditAnimalPostRequest editAnimalPost)
+    {
+        var post = _mapper.Map<AnimalPost>(editAnimalPost);
+        var result = _animalPostRepository.Update(post);
+        if (!result)
+        {
+            return RedirectToAction(nameof(Edit), new { editAnimalPost.Id });
+        }
+
+        return RedirectToAction(nameof(GetAll));
+    }
+
+    [HttpPost]
     public IActionResult Delete(int id)
     {
         var result = _animalPostRepository.Delete(id);

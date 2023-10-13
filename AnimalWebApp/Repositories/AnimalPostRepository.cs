@@ -19,7 +19,7 @@ public class AnimalPostRepository : IAnimalPostRepository
         return _dataContext.LoadData<AnimalPost>(sql);
     }
 
-    public AnimalPost? Get(int id)
+    public AnimalPost Get(int id)
     {
         var sql = $"SELECT * FROM AnimalPosts WHERE Id={id}";
         return _dataContext.LoadSingleData<AnimalPost>(sql);
@@ -27,12 +27,12 @@ public class AnimalPostRepository : IAnimalPostRepository
 
     public bool Add(AnimalPost animalPost, List<int> tagIds)
     {
-        var sql = $"INSERT INTO AnimalPosts ([Title], [Content], [Description], [ImageUrl], [HandleUrl], [PublishedDate] ,[Author] ,[Visible]) VALUES ('{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.HandleUrl}', '{animalPost.PublishedDate}', '{animalPost.Author}', '{animalPost.Visible}'); SELECT SCOPE_IDENTITY()";
+        var sql = $"INSERT INTO AnimalPosts ([Title], [Content], [Description], [ImageUrl], [HandleUrl], [PublishedDate] ,[Author] ,[Visible]) VALUES ('{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.HandleUrl}', '{animalPost.PublishedDate}', '{animalPost.Author}', '{animalPost.Visible}') ; SELECT SCOPE_IDENTITY()";
 
         var recentId = _dataContext.LoadSingleData<int>(sql);
-        foreach (var tag in tagIds)
+        foreach (var tagId in tagIds)
         {
-            var tagSql = $"INSERT INTO TagsAnimalPosts (TagId, AnimalPostId) VALUES ({tag}, {recentId})";
+            var tagSql = $"INSERT INTO TagsAnimalPosts (TagId, AnimalPostId) VALUES ({tagId}, {recentId})";
             var result = _dataContext.Execute(tagSql);
             if (!result)
             {
@@ -45,12 +45,13 @@ public class AnimalPostRepository : IAnimalPostRepository
 
     public bool Update(AnimalPost animalPost)
     {
-        throw new NotImplementedException();
+        var sql = $"UPDATE AnimalPosts Set [Title]='{animalPost.Title}', [Content]='{animalPost.Content}', [Description]='{animalPost.Description}', [Author]='{animalPost.Author}' WHERE Id={animalPost.Id}";
+        return _dataContext.Execute(sql);
     }
 
     public bool Delete(int id)
     {
-        var sql = $"DELETE FROM AnimalPosts WHERE Id={id}";
+        var sql = $"DELETE FROM TagsAnimalPosts WHERE AnimalPostId='{id}' ; DELETE FROM AnimalPosts WHERE Id={id}";
         return _dataContext.Execute(sql);
     }
 }
