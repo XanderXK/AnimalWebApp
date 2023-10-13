@@ -19,9 +19,16 @@ public class TagRepository : ITagRepository
         return _dataContext.LoadSingleData<Tag>(sql);
     }
 
+
     public List<Tag> GetAll()
     {
         var sql = $"SELECT * FROM Tags";
+        return _dataContext.LoadData<Tag>(sql);
+    }
+
+    public List<Tag> GetTagsForPost(int postId)
+    {
+        var sql = $"SELECT Tags.Id, Tags.Name, Tags.DisplayName FROM Tags INNER JOIN TagsAnimalPosts ON Tags.Id = TagsAnimalPosts.TagId INNER JOIN AnimalPosts ON  TagsAnimalPosts.AnimalPostId = AnimalPosts.Id WHERE AnimalPostId = {postId}";
         return _dataContext.LoadData<Tag>(sql);
     }
 

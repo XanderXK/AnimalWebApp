@@ -34,11 +34,11 @@ public class AdminTagsController : Controller
             return BadRequest(ModelState);
         }
 
-        return RedirectToAction(nameof(TagList));
+        return RedirectToAction(nameof(GetAll));
     }
 
     [HttpGet]
-    public IActionResult TagList()
+    public IActionResult GetAll()
     {
         var tags = _tagRepository.GetAll();
         return View(tags);
@@ -62,7 +62,7 @@ public class AdminTagsController : Controller
             return RedirectToAction(nameof(Edit), new { id = editTagRequest.Id });
         }
 
-        return RedirectToAction(nameof(TagList));
+        return RedirectToAction(nameof(GetAll));
     }
 
     [HttpPost]
@@ -74,6 +74,6 @@ public class AdminTagsController : Controller
             return RedirectToAction(nameof(Edit), new { id });
         }
 
-        return RedirectToAction(nameof(TagList));
+        return RedirectToAction(nameof(GetAll));
     }
 }

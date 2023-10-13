@@ -1,0 +1,42 @@
+@model AnimalWebApp.Models.ViewModels.EditAnimalPostRequest
+
+<div class="bg-secondary bg-opacity-10 py-3">
+    <div class="container">
+        <h1>Edit Post</h1>
+    </div>
+</div>
+
+<div class="container py-3">
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Id</label>
+            <input type="text" class="form-control" id="id" asp-for="Id" readonly=""/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Content</label>
+            <input type="text" class="form-control" id="content" asp-for="Content"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" asp-for="Description"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Author</label>
+            <input type="text" class="form-control" id="author" asp-for="Author"/>
+        </div>
+
+        <div class="mb-3">
+            <div class="d-flex">
+                <button type="submit" class="btn btn-dark">Update</button>
+                <button type="submit" class="btn btn-danger ms-2"
+                        asp-area="" asp-controller="AnimalPosts" asp-action="Delete" asp-route-id="@Model.Id">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>

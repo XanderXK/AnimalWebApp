@@ -40,9 +40,35 @@ public class AnimalPostsController : Controller
     public IActionResult Add(AddAnimalPostRequest addAnimalPostRequest)
     {
         var animalPost = _mapper.Map<AnimalPost>(addAnimalPostRequest);
-        animalPost.Tags = _tagRepository.GetAll()
-            .Where(tag => addAnimalPostRequest.SelectedTags.Contains(tag.Id.ToString())).ToList();
-        _animalPostRepository.Add(animalPost);
-        return View(addAnimalPostRequest);
+        var tagIds = addAnimalPostRequest.SelectedTags.Select(int.Parse).ToList();
+        _animalPostRepository.Add(animalPost, tagIds);
+        return RedirectToAction(nameof(GetAll));
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var posts = _animalPostRepository.GetAll();
+        return View(posts);
+    }
+
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        var post = _animalPostRepository.Get(id);
+        var editPost = _mapper.Map<EditAnimalPostRequest>(post);
+        return View(editPost);
+    }
+
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        var result = _animalPostRepository.Delete(id);
+        if (!result)
+        {
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
+        return RedirectToAction(nameof(GetAll));
     }
 }

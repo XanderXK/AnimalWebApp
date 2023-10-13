@@ -25,14 +25,14 @@ public class AnimalPostRepository : IAnimalPostRepository
         return _dataContext.LoadSingleData<AnimalPost>(sql);
     }
 
-    public bool Add(AnimalPost animalPost)
+    public bool Add(AnimalPost animalPost, List<int> tagIds)
     {
         var sql = $"INSERT INTO AnimalPosts ([Title], [Content], [Description], [ImageUrl], [HandleUrl], [PublishedDate] ,[Author] ,[Visible]) VALUES ('{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.HandleUrl}', '{animalPost.PublishedDate}', '{animalPost.Author}', '{animalPost.Visible}'); SELECT SCOPE_IDENTITY()";
 
         var recentId = _dataContext.LoadSingleData<int>(sql);
-        foreach (var tag in animalPost.Tags)
+        foreach (var tag in tagIds)
         {
-            var tagSql = $"INSERT INTO TagsAnimalPosts (TagId, AnimalPostId) VALUES ({tag.Id}, {recentId})";
+            var tagSql = $"INSERT INTO TagsAnimalPosts (TagId, AnimalPostId) VALUES ({tag}, {recentId})";
             var result = _dataContext.Execute(tagSql);
             if (!result)
             {
