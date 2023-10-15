@@ -28,6 +28,12 @@
             <input type="text" class="form-control" id="imageUrl" asp-for="ImageUrl"/>
         </div>
 
+        <div class="form-label">
+            <label class="form-label">Upload Image</label>
+            <input type="file" id="uploadImage" class="form-control"/>
+            <img src="" id="previewImage" style="display: none; width: 300px" alt=""/>
+        </div>
+
         <div class="mb-3">
             <label class="form-label">Handle URL</label>
             <input type="text" class="form-control" id="handleUrl" asp-for="HandleUrl"/>
@@ -59,3 +65,40 @@
         </div>
     </form>
 </div>
+
+@section Scripts
+{
+    @* <script> *@
+    @*  var editor = new FroalaEditor('#content', { *@
+    @*      imageUploadURL: '/api/images/' *@
+    @*  }); *@
+    @* </script> *@
+    
+    <script>
+        const uploadImageElement = document.getElementById('uploadImage');
+        const imageUrlElement = document.getElementById('imageUrl');
+        const previewImageElement = document.getElementById('previewImage');
+        
+        async function upload(e)
+        {
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+            
+            await fetch('/api/Images', 
+            { 
+                method: 'Post',
+                headers: {'Accept' : '*/*'},
+                body: data
+            })
+            .then(response=>response.json())
+            .then(result=>
+            {
+                imageUrlElement.value= result.link;
+                previewImageElement.src = result.link;
+                previewImageElement.style.display= 'block';
+            });
+        }
+        
+        uploadImageElement.addEventListener('change', upload);
+    </script>
+}
