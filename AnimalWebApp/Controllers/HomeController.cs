@@ -1,21 +1,24 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using AnimalWebApp.Models;
+using AnimalWebApp.Repositories;
 
 namespace AnimalWebApp.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IAnimalPostRepository _animalPostRepository;
 
-    public HomeController(ILogger<HomeController> logger)
+
+    public HomeController(IAnimalPostRepository animalPostRepository)
     {
-        _logger = logger;
+        _animalPostRepository = animalPostRepository;
     }
-
+    
     public IActionResult Index()
     {
-        return View();
+        var posts = _animalPostRepository.GetAll();
+        return View(posts);
     }
 
     public IActionResult Privacy()
