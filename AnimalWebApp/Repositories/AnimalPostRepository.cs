@@ -27,7 +27,7 @@ public class AnimalPostRepository : IAnimalPostRepository
 
     public bool Add(AnimalPost animalPost, List<int> tagIds)
     {
-        var sql = $"INSERT INTO AnimalPosts ([Title], [Content], [Description], [ImageUrl], [HandleUrl], [PublishedDate] ,[Author] ,[Visible]) VALUES ('{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.HandleUrl}', '{animalPost.PublishedDate}', '{animalPost.Author}', '{animalPost.Visible}') ; SELECT SCOPE_IDENTITY()";
+        var sql = $"INSERT INTO AnimalPosts ([Title], [Content], [Description], [ImageUrl], [PublishedDate] ,[Author] ,[Visible]) VALUES ('{animalPost.Title}', '{animalPost.Content}', '{animalPost.Description}', '{animalPost.ImageUrl}', '{animalPost.PublishedDate}', '{animalPost.Author}', '{animalPost.Visible}') ; SELECT SCOPE_IDENTITY()";
 
         var recentId = _dataContext.LoadSingleData<int>(sql);
         foreach (var tagId in tagIds)

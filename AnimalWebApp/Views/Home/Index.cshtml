@@ -20,7 +20,10 @@
             {
                 <div class="mb-5 bg-light box-shadow">
                     <h2 class="mb-2">
-                        <a class="text-black text-decoration-none" href="#">@post.Title</a>
+                        <a class="text-black text-decoration-none"
+                           asp-area="" asp-controller="AnimalPosts" asp-action="Index" asp-route-id="@post.Id">
+                            @post.Title
+                        </a>
                     </h2>
                     <img class="mb-3 d-block img-fluid" src="@post.ImageUrl" alt="@post.Title"/>
                     <p class="mb-2">@post.Description</p>
