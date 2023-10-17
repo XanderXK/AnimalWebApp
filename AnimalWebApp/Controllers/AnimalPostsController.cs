@@ -12,8 +12,7 @@ public class AnimalPostsController: Controller
         _animalPostRepository = animalPostRepository;
     }
     
-    
-    [HttpGet]
+    [HttpGet("[controller]/{id:int}")]
     public IActionResult Index(int id)
     {
         var post = _animalPostRepository.Get(id);
