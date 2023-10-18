@@ -1,16 +1,21 @@
 using AnimalWebApp.Data;
 using AnimalWebApp.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddUserStore<AuthStore>().AddRoleStore<AuthStore>();
 
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Auth"));
+});
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IAnimalPostRepository, AnimalPostRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
-
 
 var app = builder.Build();
 

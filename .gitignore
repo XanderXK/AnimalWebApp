@@ -1,6 +1,7 @@
 .idea/
 bin/
 obj/
+Migrations/
 *.suo
 *.user
 *.sln.docstates
