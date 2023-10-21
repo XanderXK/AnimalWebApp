@@ -2,10 +2,12 @@ using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
 using AnimalWebApp.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnimalWebApp.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class AdminTagsController : Controller
 {
     private readonly ITagRepository _tagRepository;
@@ -17,7 +19,7 @@ public class AdminTagsController : Controller
         _tagRepository = tagRepository;
         _mapper = mapper;
     }
-
+    
     [HttpGet]
     public IActionResult Add()
     {

@@ -2,11 +2,13 @@ using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
 using AnimalWebApp.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AnimalWebApp.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class AdminPostsController : Controller
 {
     private readonly ITagRepository _tagRepository;

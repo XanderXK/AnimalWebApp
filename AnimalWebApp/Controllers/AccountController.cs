@@ -45,9 +45,10 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string ReturnUrl)
     {
-        return View();
+        var loginUser = new LoginUser { ReturnUrl = ReturnUrl };
+        return View(loginUser);
     }
 
     [HttpPost]
@@ -56,6 +57,11 @@ public class AccountController : Controller
         var result = await _signInManager.PasswordSignInAsync(loginUser.UserName, loginUser.Password, false, false);
         if (result.Succeeded)
         {
+            if (!string.IsNullOrWhiteSpace(loginUser.ReturnUrl))
+            {
+                return Redirect(loginUser.ReturnUrl);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -63,8 +69,15 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
+        await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 }

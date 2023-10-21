@@ -29,17 +29,20 @@
                         <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Admin</a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="Add">Add Tag</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="GetAll">All Tags</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="AdminPosts" asp-action="Add">Add Post</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="AdminPosts" asp-action="GetAll">All Posts</a>
-                            </li>
-                        </ul>
-                    </li>
+                    @if (SinInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Admin</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="Add">Add Tag</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="GetAll">All Tags</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="AdminPosts" asp-action="Add">Add Post</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="AdminPosts" asp-action="GetAll">All Posts</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
 
                 </ul>
 
