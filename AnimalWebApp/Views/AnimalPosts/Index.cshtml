@@ -1,4 +1,4 @@
-@model AnimalPost
+@model AnimalWebApp.Models.ViewModels.AnimalPostDetails
 
 @{
     ViewData["Title"] = Model.Title;
@@ -27,6 +27,8 @@
             <div class="mb-3 d-flex animal-content">
                 @*TODO: show tags *@
             </div>
+            
+            <div class="mb-3">Likes: @Model.LikeCount</div>
             
         </div>
     </div>
