@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SinInManager
+@inject UserManager<IdentityUser> UserManager
 @model AnimalWebApp.Models.ViewModels.AnimalPostDetails
 
 @{
@@ -27,9 +30,35 @@
             <div class="mb-3 d-flex animal-content">
                 @*TODO: show tags *@
             </div>
-            
+
             <div class="mb-3">Likes: @Model.LikeCount</div>
-            
+            @if (SinInManager.IsSignedIn(User))
+            {
+                <a id="btnLike" class="btn me-3 bg-light text-dark">Like</a>
+            }
+
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        const btnLikeElement=document.getElementById('btnLike');
+
+        async function addLike()
+        {
+          await  fetch('/api/Like/Add',
+            {
+                method: 'Post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                },
+                body: JSON.stringify({animalPostId: '@Model.Id', userId: '@UserManager.GetUserId(User)'})
+            })
+        }
+        
+        btnLikeElement.addEventListener('click', addLike);
+    </script>
+}
