@@ -31,11 +31,38 @@
                 @*TODO: show tags *@
             </div>
 
-            <div class="mb-3">Likes: @Model.LikeCount</div>
+            <div id="likeCount" class="mb-3">Likes: @Model.LikeCount</div>
+
             @if (SinInManager.IsSignedIn(User))
             {
-                <a id="btnLike" class="btn me-3 bg-light text-dark">Like</a>
+                <a id="btnLike" class="btn me-3 bg-dark text-light">Like</a>
             }
+
+            <div class="card">
+                <div class="card-header">
+                    <h5>Comments</h5>
+                    @if (SinInManager.IsSignedIn(User))
+                    {
+                        <form method="post" asp-action="AddComment">
+                            <div class="mb-3">
+                                <label class="form-label">Comment Text:</label>
+                                <input type="text" class="form-control" name="description"/>
+                            </div>
+
+                            <input type="hidden" name="animalPostId" value="@Model.Id"/>
+                            <input type="hidden" name="userId" value="@UserManager.GetUserId(User)"/>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-dark">Submit</button>
+                            </div>
+                        </form>
+                    }
+                </div>
+                <div class="card-body">
+
+                </div>
+
+            </div>
 
         </div>
     </div>
@@ -45,7 +72,22 @@
 {
     <script>
         const btnLikeElement=document.getElementById('btnLike');
-
+        const likeCountElement=document.getElementById('likeCount');
+        
+        async function getLikeCount()
+        {
+           await fetch('/api/Like/@Model.Id/likeCount', 
+           {
+                method: 'Get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+             },
+           })
+           .then(data=> data.json())
+           .then(result=> likeCountElement.innerHTML ="Likes: "+ result)
+        }
+        
         async function addLike()
         {
           await  fetch('/api/Like/Add',
@@ -56,9 +98,10 @@
                     'Accept': '*/*'
                 },
                 body: JSON.stringify({animalPostId: '@Model.Id', userId: '@UserManager.GetUserId(User)'})
-            })
+            }).then(getLikeCount)
         }
         
         btnLikeElement.addEventListener('click', addLike);
+
     </script>
 }

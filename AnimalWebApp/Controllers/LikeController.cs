@@ -18,12 +18,20 @@ public class LikeController : Controller
     [HttpPost("Add")]
     public IActionResult Add(Like like)
     {
-        var result = _likeRepository.AddLike(like);
+        var result = _likeRepository.ToggleLike(like);
         if (!result)
         {
             return BadRequest(ModelState);
         }
 
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("{postId:int}/likeCount")]
+    public IActionResult GetLikeCount(int postId)
+    {
+        var likeCount = _likeRepository.GetLikeCount(postId);
+        return Ok(likeCount);
     }
 }

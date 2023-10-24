@@ -1,3 +1,4 @@
+using AnimalWebApp.Models;
 using AnimalWebApp.Models.ViewModels;
 using AnimalWebApp.Repositories;
 using AutoMapper;
@@ -9,12 +10,14 @@ public class AnimalPostsController : Controller
 {
     private readonly IAnimalPostRepository _animalPostRepository;
     private readonly ILikeRepository _likeRepository;
+    private readonly ICommentRepository _commentRepository;
     private readonly IMapper _mapper;
 
-    public AnimalPostsController(IAnimalPostRepository animalPostRepository, ILikeRepository likeRepository, IMapper mapper)
+    public AnimalPostsController(IAnimalPostRepository animalPostRepository, ILikeRepository likeRepository, ICommentRepository commentRepository, IMapper mapper)
     {
         _animalPostRepository = animalPostRepository;
         _likeRepository = likeRepository;
+        _commentRepository = commentRepository;
         _mapper = mapper;
     }
 
@@ -30,5 +33,13 @@ public class AnimalPostsController : Controller
         }
 
         return View(postDetails);
+    }
+
+
+    [HttpPost]
+    public IActionResult AddComment(Comment comment)
+    {
+        _commentRepository.Add(comment);
+        return RedirectToAction(nameof(Index), new { id = comment.AnimalPostId });
     }
 }

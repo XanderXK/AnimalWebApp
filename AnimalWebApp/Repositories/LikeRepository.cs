@@ -19,10 +19,19 @@ public class LikeRepository : ILikeRepository
         return result;
     }
 
-    public bool AddLike(Like like)
+    public bool ToggleLike(Like like)
     {
-        var sql = $"INSERT INTO Likes (PostId, UserId) VALUES ({like.AnimalPostId}, '{like.UserId}')";
-        Console.WriteLine(sql);
-        return _dataContext.Execute(sql);
+        var sqlLiked = $"SELECT Count(*) FROM Likes WHERE PostId = {like.AnimalPostId} AND UserId = '{like.UserId}'";
+        var liked = _dataContext.LoadSingleData<int>(sqlLiked) > 0;
+        if (liked)
+        {
+            var sql = $"DELETE FROM Likes WHERE PostId = {like.AnimalPostId} AND UserId = '{like.UserId}'";
+            return _dataContext.Execute(sql);
+        }
+        else
+        {
+            var sql = $"INSERT INTO Likes (PostId, UserId) VALUES ({like.AnimalPostId}, '{like.UserId}')";
+            return _dataContext.Execute(sql);
+        }
     }
 }
