@@ -11,4 +11,5 @@ public class AnimalPostDetails
     public string Author { get; set; }
     public bool Visible { get; set; }
     public int LikeCount { get; set; }
+    public ICollection<Comment> Comments { get; set; }
 }

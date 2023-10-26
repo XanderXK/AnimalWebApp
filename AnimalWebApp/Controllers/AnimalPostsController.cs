@@ -13,6 +13,7 @@ public class AnimalPostsController : Controller
     private readonly ICommentRepository _commentRepository;
     private readonly IMapper _mapper;
 
+    
     public AnimalPostsController(IAnimalPostRepository animalPostRepository, ILikeRepository likeRepository, ICommentRepository commentRepository, IMapper mapper)
     {
         _animalPostRepository = animalPostRepository;
@@ -28,14 +29,13 @@ public class AnimalPostsController : Controller
         var postDetails = _mapper.Map<AnimalPostDetails>(post);
         if (post != null)
         {
-            var likes = _likeRepository.GetLikeCount(post.Id);
-            postDetails.LikeCount = likes;
+            postDetails.LikeCount = _likeRepository.GetLikeCount(post.Id);
+            postDetails.Comments = _commentRepository.GetAll();
         }
 
         return View(postDetails);
     }
-
-
+    
     [HttpPost]
     public IActionResult AddComment(Comment comment)
     {

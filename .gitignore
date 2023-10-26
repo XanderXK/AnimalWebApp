@@ -6,4 +6,4 @@ Migrations/
 *.user
 *.sln.docstates
 
-appsettings.json
+appsettings.Development.json

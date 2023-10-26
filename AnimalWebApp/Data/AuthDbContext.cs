@@ -14,6 +14,8 @@ public class AuthDbContext : IdentityDbContext
     {
         base.OnModelCreating(builder);
 
+        builder.HasDefaultSchema("auth");
+        
         var roles = new List<IdentityRole>
         {
             new() { Name = "SuperAdmin", NormalizedName = "SuperAdmin", Id = "0", ConcurrencyStamp = "0" },
