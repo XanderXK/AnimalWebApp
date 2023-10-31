@@ -30,6 +30,11 @@ public class AdminUsersController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(AddUser addUser)
     {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
         var result = await _userRepository.AddAsync(addUser);
         if (!result)
         {

@@ -24,6 +24,11 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterUser registerUser)
     {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+        
         var identityUser = new IdentityUser
         {
             UserName = registerUser.UserName,
@@ -45,23 +50,22 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login(string ReturnUrl)
+    public IActionResult Login()
     {
-        var loginUser = new LoginUser { ReturnUrl = ReturnUrl };
-        return View(loginUser);
+        return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Login(LoginUser loginUser)
     {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+        
         var result = await _signInManager.PasswordSignInAsync(loginUser.UserName, loginUser.Password, false, false);
         if (result.Succeeded)
         {
-            if (!string.IsNullOrWhiteSpace(loginUser.ReturnUrl))
-            {
-                return Redirect(loginUser.ReturnUrl);
-            }
-
             return RedirectToAction("Index", "Home");
         }
 

@@ -10,17 +10,17 @@
     <form method="post">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" asp-for="Title"/>
+            <input type="text" class="form-control" id="title" asp-for="Title" required/>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Content</label>
-            <textarea class="form-control" id="content" asp-for="Content"></textarea>
+            <textarea class="form-control" id="content" asp-for="Content" required></textarea>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <input type="text" class="form-control" id="description" asp-for="Description"/>
+            <input type="text" class="form-control" id="description" asp-for="Description" required/>
         </div>
 
         <div class="mb-3">
@@ -41,7 +41,7 @@
 
         <div class="mb-3">
             <label class="form-label">Author</label>
-            <input type="text" class="form-control" id="author" asp-for="Author"/>
+            <input type="text" class="form-control" id="author" asp-for="Author" required/>
         </div>
 
         <div class="form-check mb-3">
@@ -63,11 +63,11 @@
 
 @section Scripts
 {
-    @* <script> *@
-    @*  var editor = new FroalaEditor('#content', { *@
-    @*      imageUploadURL: '/api/images/' *@
-    @*  }); *@
-    @* </script> *@
+    <script>
+     var editor = new FroalaEditor('#content', {
+         imageUploadURL: '/api/images/'
+     });
+    </script>
     
     <script>
         const uploadImageElement = document.getElementById('uploadImage');

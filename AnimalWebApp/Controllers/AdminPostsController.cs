@@ -32,7 +32,11 @@ public class AdminPostsController : Controller
             {
                 Text = tag.DisplayName,
                 Value = tag.Id.ToString()
-            })
+            }).ToList(),
+            Title = string.Empty,
+            Content = string.Empty,
+            Description = string.Empty,
+            Author = string.Empty
         };
 
         return View(addAnimalPostRequest);
@@ -65,6 +69,11 @@ public class AdminPostsController : Controller
     [HttpPost]
     public IActionResult Edit(EditAnimalPostRequest editAnimalPost)
     {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction(nameof(Edit), new { id = editAnimalPost.Id });
+        }
+
         var post = _mapper.Map<AnimalPost>(editAnimalPost);
         var result = _animalPostRepository.Update(post);
         if (!result)

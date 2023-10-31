@@ -19,7 +19,7 @@ public class AdminTagsController : Controller
         _tagRepository = tagRepository;
         _mapper = mapper;
     }
-    
+
     [HttpGet]
     public IActionResult Add()
     {
@@ -29,6 +29,11 @@ public class AdminTagsController : Controller
     [HttpPost]
     public IActionResult Add(AddTagRequest addTagRequest)
     {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
         var tag = _mapper.Map<Tag>(addTagRequest);
         var result = _tagRepository.Add(tag);
         if (!result)
@@ -57,6 +62,11 @@ public class AdminTagsController : Controller
     [HttpPost]
     public IActionResult Edit(EditTagRequest editTagRequest)
     {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction(nameof(Edit), new { id = editTagRequest.Id });
+        }
+
         var tag = _mapper.Map<Tag>(editTagRequest);
         var result = _tagRepository.Update(tag);
         if (!result)

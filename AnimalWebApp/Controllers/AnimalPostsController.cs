@@ -13,7 +13,7 @@ public class AnimalPostsController : Controller
     private readonly ICommentRepository _commentRepository;
     private readonly IMapper _mapper;
 
-    
+
     public AnimalPostsController(IAnimalPostRepository animalPostRepository, ILikeRepository likeRepository, ICommentRepository commentRepository, IMapper mapper)
     {
         _animalPostRepository = animalPostRepository;
@@ -35,10 +35,15 @@ public class AnimalPostsController : Controller
 
         return View(postDetails);
     }
-    
+
     [HttpPost]
     public IActionResult AddComment(Comment comment)
     {
+        if (!ModelState.IsValid)
+        {
+            return RedirectToAction(nameof(Index), new { id = comment.AnimalPostId });
+        }
+
         _commentRepository.Add(comment);
         return RedirectToAction(nameof(Index), new { id = comment.AnimalPostId });
     }

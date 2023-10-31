@@ -10,12 +10,12 @@
                 <div class="mb-3">
                     <label class="form-label">UserName</label>
                     <input type="text" id="userName" class="form-control" asp-for="UserName"/>
+                    <span class="text-dark" asp-validation-for="UserName"></span>
 
                     <label class="form-label">Password</label>
                     <input type="password" id="password" class="form-control" asp-for="Password"/>
+                    <span class="text-dark" asp-validation-for="Password"></span>
 
-                    <input type="hidden" asp-for="ReturnUrl"/>
-                    
                     <div class="mt-3">
                         <button type="submit" class="btn btn-dark">Login</button>
                     </div>
